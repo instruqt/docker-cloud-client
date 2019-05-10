@@ -10,8 +10,8 @@
 
 <body>
     <div class="accountList">
-        {{ if ne (index .Env "INSTRUQT_AWS_ACCOUNTS") "" }}
-            {{ range $i, $a := (. | strings.Split ",") }}
+        {{ if ne (getenv "INSTRUQT_AWS_ACCOUNTS") "" }}
+            {{ range $i, $a := (.Env.INSTRUQT_AWS_ACCOUNTS | strings.Split ",") }}
         <div class="account awsAccount">
             <div class="card">
                 <div class="header">
@@ -44,8 +44,8 @@
         </div>
             {{ end }}
         {{ end }}
-        {{ if ne (index .Env "INSTRUQT_GCP_PROJECTS") "" }}
-            {{ range $i, $p := (. | strings.Split ",") }}
+        {{ if ne (getenv "INSTRUQT_GCP_PROJECTS") "" }}
+            {{ range $i, $p := (.Env.INSTRUQT_GCP_PROJECTS | strings.Split ",") }}
         <div class="account gcpProject">
             <div class="card">
                 <div class="header">
