@@ -1,0 +1,101 @@
+html, body {
+    font-family: Rubik,sans-serif;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 300;
+    background-color: #f2f2f2;
+}
+
+body, h1, h2, h3, h4, h5, html, p {
+    margin: 0;
+    padding: 0;
+}
+
+.accountList {
+    max-width: 1200px;
+    margin: 45px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.account {
+    flex-basis: 33.3333%;
+    max-width: 33.3333%;
+    min-width: 325px;
+
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 0px 20px;
+}
+
+a {
+    color: inherit;
+}
+
+.card {
+    box-shadow: rgba(149, 159, 177, 0.8) 0px 1px 2px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    min-height: 100%;
+    background: white;
+    border-radius: 2px;
+}
+
+.card .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 65px;
+}
+
+.logo img {
+    width: 48px;
+    margin: 30px 0px 0px 30px;
+}
+
+.title {
+    padding: 30px 40px 10px 25px;
+
+    width: calc(100% - 48px);
+    display: flex;
+    flex-direction: column;
+}
+
+.title p {
+    line-height: 20px;
+    color: rgb(37, 47, 66);
+    font-family: Roboto, sans-serif;
+    font-weight: normal;
+    font-size: 16px;
+    padding: 5px 0px 0px;
+}
+
+.title h2 {
+    color: rgb(37, 47, 66);
+    font-weight: normal;
+    font-size: 20px;
+    letter-spacing: 0.2px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.properties {
+    margin: 20px 30px;
+
+    font-style: normal;
+    font-size: 12px;
+}
+
+.properties .key {
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+.properties .value {
+    font-weight: 300;
+}
