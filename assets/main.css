@@ -23,7 +23,7 @@ body, h1, h2, h3, h4, h5, html, p {
 .account {
     flex-basis: 33.3333%;
     max-width: 33.3333%;
-    min-width: 325px;
+    min-width: 350px;
 
     box-sizing: border-box;
     padding: 10px;
