@@ -40,6 +40,30 @@ gcloud_init() {
     fi
 }
 
+aws_init() {
+    if [ -n "${INSTRUQT_AWS_ACCOUNTS}" ]; then
+        PROJECTS=("${INSTRUQT_AWS_ACCOUNTS//,/ }")
+
+        # load all credentials into aws configure
+        for PROJECT in ${PROJECTS[@]}; do
+		VAR="INSTRUQT_AWS_ACCOUNT_${PROJECT}_AWS_ACCESS_KEY_ID"
+		aws configure --profile $PROJECT  set aws_access_key_id "${!VAR}"
+		VAR="INSTRUQT_AWS_ACCOUNT_${PROJECT}_AWS_SECRET_ACCESS_KEY"
+		aws configure --profile $PROJECT  set aws_secret_access_key "${!VAR}"
+		VAR="INSTRUQT_AWS_ACCOUNT_${PROJECT}_USERNAME"
+		USERNAME="${!VAR}"
+
+		TOKEN=$(aws sts --profile $PROJECT get-federation-token \
+			--name $USERNAME --policy '{"Version": "2012-10-17", "Statement": [{"Action": "*", "Effect": "Allow", "Resource": "*"}]}' | \
+			jq -r '{sessionId: .Credentials.AccessKeyId, sessionKey: .Credentials.SecretAccessKey, sessionToken: .Credentials.SessionToken}' |  \
+			curl -Gso /dev/null -w %{url_effective} --data-urlencode @- "" | cut -c 3-)
+		SIGNIN_TOKEN=$(curl -sS "https://signin.aws.amazon.com/federation?Action=getSigninToken&SessionType=json&Session=$TOKEN" | jq -r .SigninToken)
+		eval "export INSTRUQT_AWS_ACCOUNT_${PROJECT}_SIGNIN_TOKEN=\"$SIGNIN_TOKEN\""
+        done
+    fi
+}
+
+aws_init
 gcloud_init &
 
 gomplate -f /opt/instruqt/index.html.tmpl -o /usr/share/nginx/html/index.html
