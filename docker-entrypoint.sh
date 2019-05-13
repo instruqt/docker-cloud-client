@@ -41,7 +41,6 @@ gcloud_init() {
 }
 
 aws_init() {
-    set -x
     if [ -n "${INSTRUQT_AWS_ACCOUNTS}" ]; then
         PROJECTS=("${INSTRUQT_AWS_ACCOUNTS//,/ }")
 
@@ -69,7 +68,6 @@ aws_init() {
 		eval "export INSTRUQT_AWS_ACCOUNT_${PROJECT}_SIGNIN_TOKEN=\"$SIGNIN_TOKEN\""
         done
     fi
-    set +x
 }
 
 aws_init
