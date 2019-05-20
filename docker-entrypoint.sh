@@ -41,15 +41,19 @@ gcloud_init() {
 }
 
 aws_init() {
-    if [ -n "${INSTRUQT_AWS_ACCOUNTS}" ]; then
+    if [[ -n ${INSTRUQT_AWS_ACCOUNTS} ]]; then
         PROJECTS=("${INSTRUQT_AWS_ACCOUNTS//,/ }")
 
         # load all credentials into aws configure
         for PROJECT in ${PROJECTS[@]}; do
+		aws configure --profile $PROJECT  set region eu-central-1
+		[[ $PROJECT == ${PROJECTS[0]} ]] && aws configure --profile default set region eu-central-1
 		VAR="INSTRUQT_AWS_ACCOUNT_${PROJECT}_AWS_ACCESS_KEY_ID"
 		aws configure --profile $PROJECT  set aws_access_key_id "${!VAR}"
+		[[ $PROJECT == ${PROJECTS[0]} ]] && aws configure --profile default set aws_access_key_id "${!VAR}"
 		VAR="INSTRUQT_AWS_ACCOUNT_${PROJECT}_AWS_SECRET_ACCESS_KEY"
 		aws configure --profile $PROJECT  set aws_secret_access_key "${!VAR}"
+		[[ $PROJECT == ${PROJECTS[0]} ]] && aws configure --profile default set aws_secret_access_key "${!VAR}"
 		VAR="INSTRUQT_AWS_ACCOUNT_${PROJECT}_USERNAME"
 		USERNAME="${!VAR}"
 
