@@ -56,20 +56,6 @@ aws_init() {
 		[[ $PROJECT == ${PROJECTS[0]} ]] && aws configure --profile default set aws_secret_access_key "${!VAR}"
 		VAR="INSTRUQT_AWS_ACCOUNT_${PROJECT}_USERNAME"
 		USERNAME="${!VAR}"
-
-
-		TOKEN=""
-		COUNT=0
-		while [ -z "$TOKEN" ]  && [ $COUNT -lt 3 ] ; do
-			TOKEN=$(aws sts --profile $PROJECT get-federation-token \
-				--name $USERNAME --policy '{"Version": "2012-10-17", "Statement": [{"Action": "*", "Effect": "Allow", "Resource": "*"}]}' | \
-				jq -r '{sessionId: .Credentials.AccessKeyId, sessionKey: .Credentials.SecretAccessKey, sessionToken: .Credentials.SessionToken}' |  \
-				curl -Gso /dev/null -w %{url_effective} --data-urlencode @- "" | cut -c 3-)
-			COUNT=$(($COUNT + 1))
-			[ -z "$TOKEN" ] && echo "INFO: no token yet. sleeping 5s" >&2 && sleep 5
-		done
-		SIGNIN_TOKEN=$(curl -sS "https://signin.aws.amazon.com/federation?Action=getSigninToken&SessionType=json&Session=$TOKEN" | jq -r .SigninToken)
-		eval "export INSTRUQT_AWS_ACCOUNT_${PROJECT}_SIGNIN_TOKEN=\"$SIGNIN_TOKEN\""
         done
     fi
 }
