@@ -1,7 +1,7 @@
 FROM nginx
 
 RUN apt-get update
-RUN apt-get install -y curl vim lsb-release apt-transport-https gnupg nano jq git awscli
+RUN apt-get install -y curl vim lsb-release apt-transport-https gnupg nano jq git awscli python3-pip
 RUN echo "deb http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -c -s) main" > /etc/apt/sources.list.d/google-cloud-sdk.list
 RUN apt-key adv --fetch-keys https://packages.cloud.google.com/apt/doc/apt-key.gpg
 RUN apt-get update
@@ -12,8 +12,8 @@ RUN echo "complete -C $(which aws_completer) aws" >> .bashrc
 
 RUN curl -o /usr/local/bin/gomplate -sSL https://github.com/hairyhenderson/gomplate/releases/download/v2.7.0/gomplate_linux-amd64 && \
     chmod +x /usr/local/bin/gomplate
-RUN curl -L -sS -o /usr/local/bin/yaml2json https://github.com/bronze1man/yaml2json/releases/download/v1.3/yaml2json_linux_amd64 && \
-    chmod +x /usr/local/bin/yaml2json
+
+RUN pip3 install cfn-flip 		# required to convert yaml to json TODO: move to own container..
 
 RUN mkdir -p $HOME/.vim/pack/tpope/start && \
     git clone https://tpope.io/vim/sensible.git $HOME/.vim/pack/tpope/start/sensible && \
