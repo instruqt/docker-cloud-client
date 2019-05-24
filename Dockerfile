@@ -12,6 +12,8 @@ RUN echo "complete -C $(which aws_completer) aws" >> .bashrc
 
 RUN curl -o /usr/local/bin/gomplate -sSL https://github.com/hairyhenderson/gomplate/releases/download/v2.7.0/gomplate_linux-amd64 && \
     chmod +x /usr/local/bin/gomplate
+RUN curl -L -sS -o /usr/local/bin/yaml2json https://github.com/bronze1man/yaml2json/releases/download/v1.3/yaml2json_linux_amd64 && \
+    chmod +x /usr/local/bin/yaml2json
 
 RUN mkdir -p $HOME/.vim/pack/tpope/start && \
     git clone https://tpope.io/vim/sensible.git $HOME/.vim/pack/tpope/start/sensible && \
