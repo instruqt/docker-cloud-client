@@ -63,5 +63,5 @@ aws_init() {
 aws_init
 gcloud_init &
 
-gomplate -f /opt/instruqt/index.html.tmpl -o /usr/share/nginx/html/index.html
+gomplate -f /opt/instruqt/index.html.tmpl -o /var/www/html/index.html
 nginx -g "daemon off;"
