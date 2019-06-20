@@ -1,26 +1,27 @@
-FROM nginx
+FROM python:3.7
 
-RUN apt-get update
-RUN apt-get install -y curl vim lsb-release apt-transport-https gnupg nano jq git awscli python3-pip
-RUN echo "deb http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -c -s) main" > /etc/apt/sources.list.d/google-cloud-sdk.list
-RUN apt-key adv --fetch-keys https://packages.cloud.google.com/apt/doc/apt-key.gpg
-RUN apt-get update
-RUN apt-get install -y google-cloud-sdk
+RUN apt-get update && \
+    apt-get install -y curl lsb-release gnupg apt-utils && \
+    curl -sS --fail -L https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
+    echo "deb http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -c -s) main" > /etc/apt/sources.list.d/google-cloud-sdk.list && \
+    apt-get update && \
+    apt-get install -y curl vim apt-transport-https nano jq git groff nginx google-cloud-sdk && \
+    rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    pip install awscli cfn-flip cfn-lint yamllint && \
+    curl -o /usr/local/bin/gomplate -sSL https://github.com/hairyhenderson/gomplate/releases/download/v2.7.0/gomplate_linux-amd64 && \
+    chmod +x /usr/local/bin/gomplate &&  \
+    curl -o /usr/local/bin/yq -sSL https://github.com/mikefarah/yq/releases/download/2.4.0/yq_linux_amd64 && \
+    chmod +x /usr/local/bin/yq
 
-RUN echo "source /usr/lib/google-cloud-sdk/completion.bash.inc" >> .bashrc
-RUN echo "complete -C $(which aws_completer) aws" >> .bashrc
 
-RUN curl -o /usr/local/bin/gomplate -sSL https://github.com/hairyhenderson/gomplate/releases/download/v2.7.0/gomplate_linux-amd64 && \
-    chmod +x /usr/local/bin/gomplate
-
-RUN pip3 install cfn-flip 		# required to convert yaml to json TODO: move to own container..
-
-RUN mkdir -p $HOME/.vim/pack/tpope/start && \
+RUN echo "source /usr/lib/google-cloud-sdk/completion.bash.inc" >> .bashrc && \
+    echo "complete -C $(which aws_completer) aws" >> .bashrc && \
+    mkdir -p $HOME/.vim/pack/tpope/start && \
     git clone https://tpope.io/vim/sensible.git $HOME/.vim/pack/tpope/start/sensible && \
     vim -u NONE -c "helptags sensible/doc" -c q && \
     mkdir -p $HOME/.vim/colors && \
-    curl -L -o $HOME/.vim/colors/basic-dark.vim https://raw.githubusercontent.com/zcodes/vim-colors-basic/master/colors/basic-dark.vim
-RUN echo "include /usr/share/nano/*" > $HOME/.nanorc
+    curl -sS --fail -L -o $HOME/.vim/colors/basic-dark.vim https://raw.githubusercontent.com/zcodes/vim-colors-basic/master/colors/basic-dark.vim && \
+    echo "include /usr/share/nano/*" > $HOME/.nanorc
 
 COPY assets/ /usr/share/nginx/html/assets/
 COPY index.html.tmpl /opt/instruqt/
