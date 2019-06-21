@@ -23,7 +23,7 @@ RUN echo "source /usr/lib/google-cloud-sdk/completion.bash.inc" >> .bashrc && \
     curl -sS --fail -L -o $HOME/.vim/colors/basic-dark.vim https://raw.githubusercontent.com/zcodes/vim-colors-basic/master/colors/basic-dark.vim && \
     echo "include /usr/share/nano/*" > $HOME/.nanorc
 
-COPY assets/ /usr/share/nginx/html/assets/
+COPY assets/  /var/www/html/assets/
 COPY index.html.tmpl /opt/instruqt/
 COPY docker-entrypoint.sh /opt/instruqt/
 
