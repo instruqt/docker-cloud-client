@@ -46,8 +46,8 @@ aws_init() {
 
         # load all credentials into aws configure
         for PROJECT in ${PROJECTS[@]}; do
-		aws configure --profile $PROJECT  set region eu-central-1
-		[[ $PROJECT == ${PROJECTS[0]} ]] && aws configure --profile default set region eu-central-1
+		aws configure --profile $PROJECT  set region eu-west-1
+		[[ $PROJECT == ${PROJECTS[0]} ]] && aws configure --profile default set region eu-west-1
 		VAR="INSTRUQT_AWS_ACCOUNT_${PROJECT}_AWS_ACCESS_KEY_ID"
 		aws configure --profile $PROJECT  set aws_access_key_id "${!VAR}"
 		[[ $PROJECT == ${PROJECTS[0]} ]] && aws configure --profile default set aws_access_key_id "${!VAR}"
