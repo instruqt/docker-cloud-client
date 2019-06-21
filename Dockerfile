@@ -16,7 +16,6 @@ RUN apt-get update && \
 
 RUN echo "source /usr/lib/google-cloud-sdk/completion.bash.inc" >> .bashrc && \
     echo "complete -C $(which aws_completer) aws" >> .bashrc && \
-    echo "export PATH=$PATH:/usr/local/bin" >> .bashrc && \
     mkdir -p $HOME/.vim/pack/tpope/start && \
     git clone https://tpope.io/vim/sensible.git $HOME/.vim/pack/tpope/start/sensible && \
     vim -u NONE -c "helptags sensible/doc" -c q && \
