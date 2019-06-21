@@ -11,7 +11,8 @@ RUN apt-get update && \
     curl -o /usr/local/bin/gomplate -sSL https://github.com/hairyhenderson/gomplate/releases/download/v2.7.0/gomplate_linux-amd64 && \
     chmod +x /usr/local/bin/gomplate &&  \
     curl -o /usr/local/bin/yq -sSL https://github.com/mikefarah/yq/releases/download/2.4.0/yq_linux_amd64 && \
-    chmod +x /usr/local/bin/yq
+    chmod +x /usr/local/bin/yq && \
+    ln -s /usr/local/bin/yq /usr/local/bin/aws /usr/local/bin/cfn-flip /usr/local/bin/cfn-lint /usr/bin
 
 
 RUN echo "source /usr/lib/google-cloud-sdk/completion.bash.inc" >> .bashrc && \
