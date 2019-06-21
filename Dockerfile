@@ -27,6 +27,7 @@ COPY assets/  /var/www/html/assets/
 COPY index.html.tmpl /opt/instruqt/
 COPY docker-entrypoint.sh /opt/instruqt/
 
-ENV PATH=/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV PATH=/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+    AWS_DEFAULT_REGION=eu-west-1
 
 ENTRYPOINT [ "/opt/instruqt/docker-entrypoint.sh" ]
