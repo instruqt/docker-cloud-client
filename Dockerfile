@@ -5,9 +5,9 @@ RUN apt-get update && \
     curl -sS --fail -L https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
     echo "deb http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -c -s) main" > /etc/apt/sources.list.d/google-cloud-sdk.list && \
     apt-get update && \
-    apt-get install -y curl vim apt-transport-https nano jq git groff nginx google-cloud-sdk && \
+    apt-get install -y curl vim apt-transport-https nano jq git groff nginx zip httpie google-cloud-sdk && \
     rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    pip install awscli cfn-flip cfn-lint yamllint yq && \
+    pip install awscli cfn-flip cfn-lint yamllint yq boto3 && \
     curl -o /usr/local/bin/gomplate -sSL https://github.com/hairyhenderson/gomplate/releases/download/v2.7.0/gomplate_linux-amd64 && \
     chmod +x /usr/local/bin/gomplate &&  \
     ln -s /usr/local/bin/yq /usr/local/bin/aws /usr/local/bin/cfn-flip /usr/local/bin/cfn-lint /usr/bin
