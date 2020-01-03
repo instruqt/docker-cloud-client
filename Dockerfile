@@ -22,6 +22,10 @@ RUN echo "source /usr/lib/google-cloud-sdk/completion.bash.inc" >> .bashrc && \
     curl -sS --fail -L -o $HOME/.vim/colors/basic-dark.vim https://raw.githubusercontent.com/zcodes/vim-colors-basic/master/colors/basic-dark.vim && \
     echo "include /usr/share/nano/*" > $HOME/.nanorc
 
+RUN wget https://github.com/cdr/code-server/releases/download/2.1692-vsc1.39.2/code-server2.1692-vsc1.39.2-linux-x86_64.tar.gz -O /tmp/code-server.tar.gz --no-check-certificate && \
+    tar -xzf /tmp/code-server.tar.gz --strip 1 -C /usr/bin && \
+    rm /tmp/code-server.tar.gz
+
 COPY assets/  /var/www/html/assets/
 COPY index.html.tmpl /opt/instruqt/
 COPY docker-entrypoint.sh /opt/instruqt/
