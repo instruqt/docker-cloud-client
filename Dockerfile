@@ -1,20 +1,22 @@
-FROM python:3.7
+FROM python:3.8
 
 RUN apt-get update && \
-    apt-get install -y curl lsb-release gnupg apt-utils && \
+    apt-get install --no-install-recommends -y curl lsb-release gnupg apt-utils && \
     curl -sS --fail -L https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
     echo "deb http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -c -s) main" > /etc/apt/sources.list.d/google-cloud-sdk.list && \
+    echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/azure-cli.list && \
+    curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null && \
     apt-get update && \
-    apt-get install -y curl vim apt-transport-https nano jq git groff nginx zip httpie google-cloud-sdk kubectl && \
+    apt-get install --no-install-recommends -y curl vim apt-transport-https nano jq git groff nginx zip httpie google-cloud-sdk kubectl azure-cli && \
     rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    pip install awscli cfn-flip cfn-lint yamllint yq boto3 && \
+    pip --no-cache-dir install awscli cfn-flip cfn-lint yamllint yq boto3 && \
     curl -o /usr/local/bin/gomplate -sSL https://github.com/hairyhenderson/gomplate/releases/download/v2.7.0/gomplate_linux-amd64 && \
     chmod +x /usr/local/bin/gomplate &&  \
     ln -s /usr/local/bin/yq /usr/local/bin/aws /usr/local/bin/cfn-flip /usr/local/bin/cfn-lint /usr/bin
 
-
-RUN echo "source /usr/lib/google-cloud-sdk/completion.bash.inc" >> .bashrc && \
-    echo "complete -C $(which aws_completer) aws" >> .bashrc && \
+RUN echo "source /usr/lib/google-cloud-sdk/completion.bash.inc" >> /etc/bash.bashrc && \
+    echo "complete -C $(which aws_completer) aws" >> /etc/bash.bashrc && \
+    echo "source /etc/bash_completion.d/azure-cli" >> /etc/bash.bashrc && \
     mkdir -p $HOME/.vim/pack/tpope/start && \
     git clone https://tpope.io/vim/sensible.git $HOME/.vim/pack/tpope/start/sensible && \
     vim -u NONE -c "helptags sensible/doc" -c q && \
