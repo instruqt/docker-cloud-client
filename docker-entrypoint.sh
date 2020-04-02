@@ -17,6 +17,14 @@
 # INSTRUQT_GCP_PROJECT_%s_SERVICE_ACCOUNT_EMAIL
 # INSTRUQT_GCP_PROJECT_%s_SERVICE_ACCOUNT_KEY
 
+# INSTRUQT_ALICLOUD_ACCOUNTS
+# INSTRUQT_ALICLOUD_ACCOUNT_%s_ACCOUNT_NAME
+# INSTRUQT_ALICLOUD_ACCOUNT_%s_ACCOUNT_ID
+# INSTRUQT_ALICLOUD_ACCOUNT_%s_USERNAME
+# INSTRUQT_ALICLOUD_ACCOUNT_%s_PASSWORD
+# INSTRUQT_ALICLOUD_ACCOUNT_%s_ACCESS_KEY_ID
+# INSTRUQT_ALICLOUD_ACCOUNT_%s_ACCESS_KEY_SECRET
+
 gcloud_init() {
     if [ -n "${INSTRUQT_GCP_PROJECTS}" ]; then
         PROJECTS=("${INSTRUQT_GCP_PROJECTS//,/ }")
@@ -60,8 +68,37 @@ aws_init() {
     fi
 }
 
+alicloud_init() {
+    if [[ -n ${INSTRUQT_ALICLOUD_ACCOUNTS} ]]; then
+        PROJECTS=("${INSTRUQT_ALICLOUD_ACCOUNTS//,/ }")
+
+        # load all credentials into aws configure
+        for PROJECT in ${PROJECTS[@]}; do
+            ACCESS_KEY_ID_VAR="INSTRUQT_ALICLOUD_ACCOUNT_${PROJECT}_ACCESS_KEY_ID"
+            ACCESS_KEY_SECRET_VAR="INSTRUQT_ALICLOUD_ACCOUNT_${PROJECT}_ACCESS_KEY_SECRET"
+
+            aliyun configure set \
+              --profile "$PROJECT" \
+              --mode AK \
+              --region eu-central-1 \
+              --language en \
+              --access-key-id "${!ACCESS_KEY_ID_VAR}" \
+              --access-key-secret "${!ACCESS_KEY_SECRET_VAR}" \
+
+            [[ $PROJECT == ${PROJECTS[0]} ]] && aliyun configure set \
+              --profile default \
+              --mode AK \
+              --region eu-central-1 \
+              --language en \
+              --access-key-id "${!ACCESS_KEY_ID_VAR}" \
+              --access-key-secret "${!ACCESS_KEY_SECRET_VAR}"
+        done
+    fi
+}
+
 aws_init
 gcloud_init &
+alicloud_init
 
 gomplate -f /opt/instruqt/index.html.tmpl -o /var/www/html/index.html
 nginx -g "daemon off;"
