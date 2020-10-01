@@ -88,7 +88,7 @@
                     </div>
                 </div>
                 <div class="properties">
-                    <div class="key">Account ID:</div>
+                    <div class="key">Subscription ID:</div>
                     <div class="value">
                         <a href="https://portal.azure.com/" target="_blank">
                             {{ getenv (print "INSTRUQT_AZURE_SUBSCRIPTION_" $p "_SUBSCRIPTION_ID") }}
@@ -103,6 +103,8 @@
                     <div class="value">{{ getenv (print "INSTRUQT_AZURE_SUBSCRIPTION_" $p "_SPN_ID") }}</div>
                     <div class="key">Service Principal Password:</div>
                     <div class="value">{{ getenv (print "INSTRUQT_AZURE_SUBSCRIPTION_" $p "_SPN_PASSWORD") }}</div>
+                    <div class="key">Tenant ID:</div>
+                    <div class="value">{{ getenv (print "INSTRUQT_AZURE_SUBSCRIPTION_" $p "_TENANT_ID") }}</div>
                 </div>
             </div>
         </div>

@@ -60,8 +60,24 @@ aws_init() {
     fi
 }
 
+azure_init() {
+    if [[ -n $INSTRUQT_AZURE_SUBSCRIPTIONS ]]; then
+        source /etc/bash_completion.d/azure-cli
+        az login --service-principal --username "$ARM_CLIENT_ID" --password "$ARM_CLIENT_SECRET" --tenant "$ARM_TENANT_ID"
+
+        mkdir -p "$HOME/.azure/credentials"
+        cat <<EOF > "$HOME/.azure/credentials"
+[$ARM_SUBSCRIPTION_ID]
+client_id=$ARM_CLIENT_ID
+secret=$ARM_CLIENT_SECRET
+tenant=$ARM_TENANT_ID
+EOF
+    fi
+}
+
 aws_init
 gcloud_init &
+azure_init &
 
 gomplate -f /opt/instruqt/index.html.tmpl -o /var/www/html/index.html
 nginx -g "daemon off;"
