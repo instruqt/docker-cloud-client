@@ -62,8 +62,12 @@ aws_init() {
 
 azure_init() {
     if [[ -n $INSTRUQT_AZURE_SUBSCRIPTIONS ]]; then
+        SUBSCRIPTIONS=("${INSTRUQT_AZURE_SUBSCRIPTIONS//,/ }")
+
         source /etc/bash_completion.d/azure-cli
-        az login --service-principal --username "$ARM_CLIENT_ID" --password "$ARM_CLIENT_SECRET" --tenant "$ARM_TENANT_ID"
+        USERNAME="INSTRUQT_AZURE_SUBSCRIPTION_${SUBSCRIPTIONS[0]}_USERNAME"
+        PASSWORD="INSTRUQT_AZURE_SUBSCRIPTION_${SUBSCRIPTIONS[0]}_PASSWORD"
+        az login --username "${!USERNAME}" --password "${!PASSWORD}"
 
         mkdir -p "$HOME/.azure/credentials"
         cat <<EOF > "$HOME/.azure/credentials"
