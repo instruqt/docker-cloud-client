@@ -28,10 +28,10 @@ RUN wget https://github.com/cdr/code-server/releases/download/2.1692-vsc1.39.2/c
     tar -xzf /tmp/code-server.tar.gz --strip 1 -C /usr/bin && \
     rm /tmp/code-server.tar.gz
 
-COPY assets/  /var/www/html/assets/
-COPY index.html.tmpl /opt/instruqt/
-COPY docker-entrypoint.sh /opt/instruqt/
-
 ENV PATH=/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 ENTRYPOINT [ "/opt/instruqt/docker-entrypoint.sh" ]
+COPY docker-entrypoint.sh /opt/instruqt/
+
+COPY assets/  /var/www/html/assets/
+COPY index.html.tmpl /opt/instruqt/

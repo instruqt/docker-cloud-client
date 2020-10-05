@@ -6,6 +6,7 @@
     <title>Instruqt Cloud Accounts</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="/assets/main.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/fontawesome/css/all.min.css" />
 </head>
 
 <body>
@@ -28,17 +29,16 @@
                     <div class="value">
                         <a href="https://instruqt-{{ getenv (print "INSTRUQT_AWS_ACCOUNT_" $a "_ACCOUNT_ID") }}.signin.aws.amazon.com/console" target="_blank">
                             {{ getenv (print "INSTRUQT_AWS_ACCOUNT_" $a "_ACCOUNT_ID") }}
-                            <img src='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"> <path fill="white" stroke="black" d="M1.5 4.518h5.982V10.5H1.5z"/> <path fill="black" d="M5.765 1H11v5.39L9.427 7.937l-1.31-1.31L5.393 9.35l-2.69-2.688 2.81-2.808L4.2 2.544z"/> <path fill="white" d="M9.995 2.004l.022 4.885L8.2 5.07 5.32 7.95 4.09 6.723l2.882-2.88-1.85-1.852z"/> </svg>'>
                         </a>
                     </div>
                     <div class="key">Username:</div>
-                    <div class="value">{{ getenv (print "INSTRUQT_AWS_ACCOUNT_" $a "_USERNAME") }}</div>
+                    <div class="value" data-copyable>{{ getenv (print "INSTRUQT_AWS_ACCOUNT_" $a "_USERNAME") }}</div>
                     <div class="key">Password:</div>
-                    <div class="value">{{ getenv (print "INSTRUQT_AWS_ACCOUNT_" $a "_PASSWORD") }}</div>
+                    <div class="value" data-copyable>{{ getenv (print "INSTRUQT_AWS_ACCOUNT_" $a "_PASSWORD") }}</div>
                     <div class="key">Access Key ID:</div>
-                    <div class="value">{{ getenv (print "INSTRUQT_AWS_ACCOUNT_" $a "_AWS_ACCESS_KEY_ID") }}</div>
+                    <div class="value" data-copyable>{{ getenv (print "INSTRUQT_AWS_ACCOUNT_" $a "_AWS_ACCESS_KEY_ID") }}</div>
                     <div class="key">Secret Access Key:</div>
-                    <div class="value">{{ getenv (print "INSTRUQT_AWS_ACCOUNT_" $a "_AWS_SECRET_ACCESS_KEY") }}</div>
+                    <div class="value" data-copyable>{{ getenv (print "INSTRUQT_AWS_ACCOUNT_" $a "_AWS_SECRET_ACCESS_KEY") }}</div>
                 </div>
             </div>
         </div>
@@ -62,13 +62,12 @@
                     <div class="value">
                         <a href="https://console.cloud.google.com/home/dashboard?project={{ getenv (print "INSTRUQT_GCP_PROJECT_" $p "_PROJECT_ID") }}" target="_blank">
                             {{ getenv (print "INSTRUQT_GCP_PROJECT_" $p "_PROJECT_ID") }}
-                            <img src='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"> <path fill="white" stroke="black" d="M1.5 4.518h5.982V10.5H1.5z"/> <path fill="black" d="M5.765 1H11v5.39L9.427 7.937l-1.31-1.31L5.393 9.35l-2.69-2.688 2.81-2.808L4.2 2.544z"/> <path fill="white" d="M9.995 2.004l.022 4.885L8.2 5.07 5.32 7.95 4.09 6.723l2.882-2.88-1.85-1.852z"/> </svg>'>
                         </a>
                     </div>
                     <div class="key">Email:</div>
-                    <div class="value">{{ getenv (print "INSTRUQT_GCP_PROJECT_" $p "_USER_EMAIL") }}</div>
+                    <div class="value" data-copyable>{{ getenv (print "INSTRUQT_GCP_PROJECT_" $p "_USER_EMAIL") }}</div>
                     <div class="key">Password:</div>
-                    <div class="value">{{ getenv (print "INSTRUQT_GCP_PROJECT_" $p "_USER_PASSWORD") }}</div>
+                    <div class="value" data-copyable>{{ getenv (print "INSTRUQT_GCP_PROJECT_" $p "_USER_PASSWORD") }}</div>
                 </div>
             </div>
         </div>
@@ -92,25 +91,48 @@
                     <div class="value">
                         <a href="https://portal.azure.com/" target="_blank">
                             {{ getenv (print "INSTRUQT_AZURE_SUBSCRIPTION_" $p "_SUBSCRIPTION_ID") }}
-                            <img src='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"> <path fill="white" stroke="black" d="M1.5 4.518h5.982V10.5H1.5z"/> <path fill="black" d="M5.765 1H11v5.39L9.427 7.937l-1.31-1.31L5.393 9.35l-2.69-2.688 2.81-2.808L4.2 2.544z"/> <path fill="white" d="M9.995 2.004l.022 4.885L8.2 5.07 5.32 7.95 4.09 6.723l2.882-2.88-1.85-1.852z"/> </svg>'>
                         </a>
                     </div>
                     <div class="key">Email:</div>
-                    <div class="value">{{ getenv (print "INSTRUQT_AZURE_SUBSCRIPTION_" $p "_USERNAME") }}</div>
+                    <div class="value" data-copyable>{{ getenv (print "INSTRUQT_AZURE_SUBSCRIPTION_" $p "_USERNAME") }}</div>
                     <div class="key">Password:</div>
-                    <div class="value">{{ getenv (print "INSTRUQT_AZURE_SUBSCRIPTION_" $p "_PASSWORD") }}</div>
+                    <div class="value" data-copyable>{{ getenv (print "INSTRUQT_AZURE_SUBSCRIPTION_" $p "_PASSWORD") }}</div>
                     <div class="key">Service Principal ID:</div>
-                    <div class="value">{{ getenv (print "INSTRUQT_AZURE_SUBSCRIPTION_" $p "_SPN_ID") }}</div>
+                    <div class="value" data-copyable>{{ getenv (print "INSTRUQT_AZURE_SUBSCRIPTION_" $p "_SPN_ID") }}</div>
                     <div class="key">Service Principal Password:</div>
-                    <div class="value">{{ getenv (print "INSTRUQT_AZURE_SUBSCRIPTION_" $p "_SPN_PASSWORD") }}</div>
+                    <div class="value" data-copyable>{{ getenv (print "INSTRUQT_AZURE_SUBSCRIPTION_" $p "_SPN_PASSWORD") }}</div>
                     <div class="key">Tenant ID:</div>
-                    <div class="value">{{ getenv (print "INSTRUQT_AZURE_SUBSCRIPTION_" $p "_TENANT_ID") }}</div>
+                    <div class="value" data-copyable>{{ getenv (print "INSTRUQT_AZURE_SUBSCRIPTION_" $p "_TENANT_ID") }}</div>
                 </div>
             </div>
         </div>
             {{ end }}
         {{ end }}
     </div>
+    <script>
+        function copyToClipboard(textToCopy) {
+            var inputHelper = document.createElement("input");
+            inputHelper.setAttribute("value", textToCopy);
+            document.body.appendChild(inputHelper);
+            inputHelper.select();
+            document.execCommand("copy");
+            document.body.removeChild(inputHelper);
+        }
+
+        var copyElementContents = function() {
+            elem = this
+            copyToClipboard(elem.innerText.trim());
+            elem.setAttribute("data-copied", "")
+            setTimeout(function(){
+                elem.removeAttribute("data-copied")
+            }, 1500)
+        };
+
+        copyElements = document.querySelectorAll('[data-copyable]')
+        for (var i = 0; i < copyElements.length; i++) {
+            copyElements[i].addEventListener('click', copyElementContents, false);
+        }
+    </script>
 </body>
 
 </html>

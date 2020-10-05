@@ -27,11 +27,32 @@ body, h1, h2, h3, h4, h5, html, p {
 
     box-sizing: border-box;
     padding: 10px;
-    margin: 0px 20px;
 }
 
 a {
     color: inherit;
+}
+
+a[target="_blank"]::after {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: " \f35d";
+    text-decoration: none;
+}
+
+[data-copyable]::after {
+    font-family: "Font Awesome 5 Free";
+    content: " \f0c5";
+}
+
+[data-copyable] {
+    cursor: pointer;
+}
+
+[data-copied]::after {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: " \f00c";
 }
 
 .card {
@@ -40,7 +61,6 @@ a {
     display: flex;
     flex-direction: column;
     -webkit-box-pack: justify;
-    justify-content: space-between;
     min-height: 100%;
     background: white;
     border-radius: 2px;
