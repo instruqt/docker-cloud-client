@@ -67,7 +67,7 @@ azure_init() {
         source /etc/bash_completion.d/azure-cli
         USERNAME="INSTRUQT_AZURE_SUBSCRIPTION_${SUBSCRIPTIONS[0]}_USERNAME"
         PASSWORD="INSTRUQT_AZURE_SUBSCRIPTION_${SUBSCRIPTIONS[0]}_PASSWORD"
-        az login --username "${!USERNAME}" --password "${!PASSWORD}"
+        az login --username="${!USERNAME}" --password="${!PASSWORD}"
 
         mkdir -p "$HOME/.azure/credentials"
         cat <<EOF > "$HOME/.azure/credentials"
