@@ -13,6 +13,11 @@ RUN apt-get update && \
     curl -o /usr/local/bin/gomplate -sSL https://github.com/hairyhenderson/gomplate/releases/download/v2.7.0/gomplate_linux-amd64 && \
     chmod +x /usr/local/bin/gomplate &&  \
     ln -s /usr/local/bin/yq /usr/local/bin/aws /usr/local/bin/cfn-flip /usr/local/bin/cfn-lint /usr/bin
+    pip uninstall awscli -y && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install && hash  -r && \
+    rm -rf /root/awscliv2.zip /root/aws
 
 RUN echo "source /usr/lib/google-cloud-sdk/completion.bash.inc" >> /etc/bash.bashrc && \
     echo "complete -C $(which aws_completer) aws" >> /etc/bash.bashrc && \
