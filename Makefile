@@ -12,6 +12,7 @@ build:
 	@echo "Building version $(VERSION)"
 	@docker build --pull \
 		-f ${VERSION}/Dockerfile \
+		--platform=linux/amd64 \
 		-t gcr.io/instruqt/cloud-client .
 
 test: build
