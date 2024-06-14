@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM python:3.12
 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install --no-install-recommends -y curl lsb-release gnupg apt-utils && \
