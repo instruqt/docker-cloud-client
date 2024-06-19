@@ -20,14 +20,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Major version
+        run: |
+          MAJOR_VERSION=$(echo $GITHUB_REF | grep -oP '^refs/tags/v\K[0-9]+')
+          if [[ "${MAJOR_VERSION}" == "1" ]]; then
+            echo "LATEST=true" >> $GITHUB_ENV
+          else
+            echo "LATEST=false" >> $GITHUB_ENV
+          fi
+          echo "MAJOR_VERSION=v$MAJOR_VERSION" >> $GITHUB_ENV
+
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: gcr.io/instruqt/cloud-client
-          # Disable tagging latest image by default for now.
+          # We mark container latest for v1 images.
           flavor: |
-            latest=false
+            latest=${{ env.LATEST }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -55,6 +65,8 @@ jobs:
         with:
           context: .
           push: true
+          platforms: linux/amd64
+          file: ${{ env.MAJOR_VERSION }}/Dockerfile
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 

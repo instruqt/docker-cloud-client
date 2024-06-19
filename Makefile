@@ -1,5 +1,19 @@
+# Defines a variable to hold the version.
+# Defaults to "v1" if not provided.
+VERSION := $(if $(version),$(version),v1)
+
+help:
+	@echo "Usage:"
+	@echo "  make build version=<version> - to build the container with the specified version"
+	@echo "  make test                    - to test the container"
+	@echo "  make help                    - to display this help message"
+
 build:
-	docker build --pull -t gcr.io/instruqt/cloud-client .
+	@echo "Building version $(VERSION)"
+	@docker build --pull \
+		-f ${VERSION}/Dockerfile \
+		--platform=linux/amd64 \
+		-t gcr.io/instruqt/cloud-client .
 
 test: build
 	docker run -it --rm \
