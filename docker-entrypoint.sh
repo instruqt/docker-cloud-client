@@ -25,6 +25,7 @@ gcloud_init() {
         for PROJECT in "${PROJECTS[@]}"; do
             TMP_FILE=$(mktemp)
             SERVICE_ACCOUNT_KEY="INSTRUQT_GCP_PROJECT_${PROJECT}_SERVICE_ACCOUNT_KEY"
+            SERVICE_ACCOUNT_EMAIL="INSTRUQT_GCP_PROJECT_${PROJECT}_SERVICE_ACCOUNT_EMAIL"
             base64 -d <(echo "${!SERVICE_ACCOUNT_KEY}") > "$TMP_FILE"
 
             # Retry gcloud auth activate service account.
@@ -43,6 +44,17 @@ gcloud_init() {
             done
 
             rm "$TMP_FILE"
+
+            IS_ACCOUNT_ACTIVE=$(gcloud auth list \
+              --filter="status:ACTIVE AND account:$SERVICE_ACCOUNT_EMAIL" \
+              --format="json(account)" | jq ". | length")
+
+            echo "Waiting for service account $SERVICE_ACCOUNT_EMAIL to become active..."
+            # Wait until the service account is active
+            until [[ $IS_ACCOUNT_ACTIVE -eq 1 ]]; do
+                echo "Service account $SERVICE_ACCOUNT_EMAIL is not yet active. Retrying in 5 seconds..."
+                sleep 5
+            done
         done
 
         # activate service account for first project
