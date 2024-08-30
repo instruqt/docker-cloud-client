@@ -28,7 +28,7 @@ gcloud_init() {
             base64 -d <(echo "${!SERVICE_ACCOUNT_KEY}") > "$TMP_FILE"
 
             # Retry gcloud auth activate service account.
-            for (( i = 1, retries = 5; i <= 5; i++ )); do
+            for (( i = 1, retries = 5; i <= retries; i++ )); do
                 if gcloud auth activate-service-account --key-file="$TMP_FILE"; then
                     echo "Command succeeded on attempt $i."
                     break
