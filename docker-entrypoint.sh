@@ -22,11 +22,26 @@ gcloud_init() {
         PROJECTS=("${INSTRUQT_GCP_PROJECTS//,/ }")
 
         # load all credentials into gcloud
-        for PROJECT in ${PROJECTS[@]}; do
+        for PROJECT in "${PROJECTS[@]}"; do
             TMP_FILE=$(mktemp)
             SERVICE_ACCOUNT_KEY="INSTRUQT_GCP_PROJECT_${PROJECT}_SERVICE_ACCOUNT_KEY"
-            base64 -d <(echo ${!SERVICE_ACCOUNT_KEY}) > "$TMP_FILE"
-            gcloud auth activate-service-account --key-file="$TMP_FILE"
+            base64 -d <(echo "${!SERVICE_ACCOUNT_KEY}") > "$TMP_FILE"
+
+            # Retry gcloud auth activate service account.
+            for (( i = 1, retries = 5; i <= 5; i++ )); do
+              if gcloud auth activate-service-account --key-file="$TMP_FILE"; then
+                  echo "Command succeeded on attempt $i."
+                  break
+              else
+                  echo "Command failed on attempt $i."
+                  # If it's not the last attempt, wait before retrying.
+                  if [ "$i" -lt "$retries" ]; then
+                      echo "Retrying in $i seconds..."
+                      sleep "$i"
+                  fi
+              fi
+            done
+
             rm "$TMP_FILE"
         done
 
@@ -80,8 +95,8 @@ EOF
 }
 
 aws_init
-gcloud_init &
-azure_init &
+gcloud_init
+azure_init
 
 gomplate -f /opt/instruqt/index.html.tmpl -o /var/www/html/index.html
 nginx -g "daemon off;"
