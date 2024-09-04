@@ -45,15 +45,18 @@ gcloud_init() {
 
             rm "$TMP_FILE"
 
-            IS_ACCOUNT_ACTIVE=$(gcloud auth list \
-              --filter="status:ACTIVE AND account:$SERVICE_ACCOUNT_EMAIL" \
-              --format="json(account)" | jq ". | length")
-
-            echo "Waiting for service account $SERVICE_ACCOUNT_EMAIL to become active..."
-            # Wait until the service account is active
-            until [[ $IS_ACCOUNT_ACTIVE -eq 1 ]]; do
-                echo "Service account $SERVICE_ACCOUNT_EMAIL is not yet active. Retrying in 5 seconds..."
-                sleep 5
+            # Retry checking account is active.
+            for (( i = 1, retries = 5; i <= retries; i++ )); do
+                is_active=$(gcloud auth list \
+                  --filter="status:ACTIVE AND account:$SERVICE_ACCOUNT_EMAIL" \
+                  --format="json(account)" | jq ". | length")
+                if [[ $is_active -eq 1 ]]; then
+                    echo "Service account $SERVICE_ACCOUNT_EMAIL is active on attempt $i."
+                    break
+                else
+                    echo "Service account $SERVICE_ACCOUNT_EMAIL is not yet active. Retrying in 5 seconds..."
+                    sleep 5
+                fi
             done
         done
 
