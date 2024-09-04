@@ -28,9 +28,11 @@ gcloud_init() {
             SERVICE_ACCOUNT_EMAIL="INSTRUQT_GCP_PROJECT_${PROJECT}_SERVICE_ACCOUNT_EMAIL"
             base64 -d <(echo "${!SERVICE_ACCOUNT_KEY}") > "$TMP_FILE"
 
+            service_account_activated=false
             # Retry gcloud auth activate service account.
             for (( i = 1, retries = 5; i <= retries; i++ )); do
                 if gcloud auth activate-service-account --key-file="$TMP_FILE"; then
+                    service_account_activated=true
                     echo "Command succeeded on attempt $i."
                     break
                 else
@@ -45,16 +47,22 @@ gcloud_init() {
 
             rm "$TMP_FILE"
 
+            # If the account is not activated then we should skip waiting
+            # for it to be marked as active.
+            if [[ $service_account_activated == false ]]; then
+              continue
+            fi
+
             # Retry checking account is active.
             for (( i = 1, retries = 5; i <= retries; i++ )); do
                 is_active=$(gcloud auth list \
-                  --filter="status:ACTIVE AND account:$SERVICE_ACCOUNT_EMAIL" \
+                  --filter="status:ACTIVE AND account:${!SERVICE_ACCOUNT_EMAIL}" \
                   --format="json(account)" | jq ". | length")
                 if [[ $is_active -eq 1 ]]; then
-                    echo "Service account $SERVICE_ACCOUNT_EMAIL is active on attempt $i."
+                    echo "Service account ${!SERVICE_ACCOUNT_EMAIL} is active on attempt $i."
                     break
                 else
-                    echo "Service account $SERVICE_ACCOUNT_EMAIL is not yet active. Retrying in 5 seconds..."
+                    echo "Service account ${!SERVICE_ACCOUNT_EMAIL} is not yet active. Retrying in 5 seconds..."
                     sleep 5
                 fi
             done
