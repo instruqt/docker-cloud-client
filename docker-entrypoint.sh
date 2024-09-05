@@ -17,6 +17,8 @@
 # INSTRUQT_GCP_PROJECT_%s_SERVICE_ACCOUNT_EMAIL
 # INSTRUQT_GCP_PROJECT_%s_SERVICE_ACCOUNT_KEY
 
+BASEDIR=/opt/instruqt/bootstrap
+
 gcloud_init() {
     if [ -n "${INSTRUQT_GCP_PROJECTS}" ]; then
         IFS=',' read -r -a PROJECTS <<< "$INSTRUQT_GCP_PROJECTS"
@@ -75,6 +77,14 @@ gcloud_init() {
         # configure project
         PROJECT_ID="INSTRUQT_GCP_PROJECT_${PROJECTS[0]}_PROJECT_ID"
         gcloud config set project "${!PROJECT_ID}" --quiet
+
+        # create the boostrap folder if it doesn't exist.
+        if [ ! -d "$BASEDIR" ]; then
+          mkdir -p "$BASEDIR"
+        fi
+
+        echo "GCP setup complete"
+        touch ${BASEDIR}/gcp-bootstrap-completed
     fi
 }
 
@@ -95,6 +105,14 @@ aws_init() {
             VAR="INSTRUQT_AWS_ACCOUNT_${PROJECT}_USERNAME"
             USERNAME="${!VAR}"
         done
+
+        # create the boostrap folder if it doesn't exist.
+        if [ ! -d "$BASEDIR" ]; then
+          mkdir -p "$BASEDIR"
+        fi
+
+        echo "AWS setup complete"
+        touch ${BASEDIR}/aws-bootstrap-completed
     fi
 }
 
@@ -114,6 +132,14 @@ client_id=$ARM_CLIENT_ID
 secret=$ARM_CLIENT_SECRET
 tenant=$ARM_TENANT_ID
 EOF
+
+        # create the boostrap folder if it doesn't exist.
+        if [ ! -d "$BASEDIR" ]; then
+          mkdir -p "$BASEDIR"
+        fi
+
+        echo "Azure setup complete"
+        touch ${BASEDIR}/azure-bootstrap-completed
     fi
 }
 
