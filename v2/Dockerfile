@@ -1,4 +1,4 @@
-FROM python:3.12
+FROM python:3.13
 
 # Update and install essential packages
 RUN apt-get update && apt-get upgrade -y && \
