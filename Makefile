@@ -1,8 +1,12 @@
 build:
-	docker build --pull -t gcr.io/instruqt/cloud-client .
+	docker build -t pablopez/cloud-client .
+
+push: build
+	docker push pablopez/cloud-client
 
 test: build
 	docker run -it --rm \
+		-e INSTRUQT_SYSDIG_ACCOUNT="true" \
 		-e INSTRUQT_AWS_ACCOUNTS="AWS1,AWS2" \
 		-e INSTRUQT_AWS_ACCOUNT_AWS1_ACCOUNT_NAME="AWS 1" \
 		-e INSTRUQT_AWS_ACCOUNT_AWS1_ACCOUNT_ID="1234567890" \
@@ -45,4 +49,4 @@ test: build
 		-e INSTRUQT_AZURE_SUBSCRIPTION_AZURE2_SPN_PASSWORD="spnpass2!@%^" \
 		-e INSTRUQT_AZURE_SUBSCRIPTION_AZURE2_TENANT_ID="22222222-e1e2-4639-a706-6556470e4046" \
 		-p 8080:80 \
-		gcr.io/instruqt/cloud-client
+		pablopez/cloud-client

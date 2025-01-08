@@ -2,6 +2,12 @@
 
 This is the `cloud-client` container, that can be used on the Instruqt platform to interact with the different supported cloud accounts.
 
+Test localy with: 
+
+```
+make
+docker run --env-file .env pablopez/cloud-client:latest
+```
 
 ## What this does
 
