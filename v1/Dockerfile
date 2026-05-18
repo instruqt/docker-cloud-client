@@ -7,7 +7,10 @@ RUN apt-get update && apt-get upgrade -y && \
     curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
     curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null && \
     apt-get update && \
-    apt-get install --no-install-recommends -y curl vim apt-transport-https nano jq git groff nginx zip httpie google-cloud-sdk kubectl azure-cli && \
+    apt-get install --no-install-recommends -y curl vim apt-transport-https nano jq git groff nginx zip httpie google-cloud-sdk azure-cli && \
+    curl -LO "https://dl.k8s.io/release/v1.36.1/bin/linux/amd64/kubectl" && \
+    install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && \
+    rm kubectl && \
     rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     pip --no-cache-dir install awscli cfn-flip cfn-lint yamllint yq boto3 && \
     curl -o /usr/local/bin/gomplate -sSL https://github.com/hairyhenderson/gomplate/releases/download/v2.7.0/gomplate_linux-amd64 && \

@@ -23,8 +23,13 @@ RUN apt-get update && apt-get upgrade -y && \
 RUN curl -sS https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
     echo "deb http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -c -s) main" > /etc/apt/sources.list.d/google-cloud-sdk.list && \
     apt-get update && \
-    apt-get install --no-install-recommends -y kubectl google-cloud-sdk && \
+    apt-get install --no-install-recommends -y google-cloud-sdk && \
     rm -rf /var/lib/apt/lists/*
+
+# Install kubectl (pinned version, independent of Google Cloud SDK)
+RUN curl -LO "https://dl.k8s.io/release/v1.36.1/bin/linux/amd64/kubectl" && \
+    install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && \
+    rm kubectl
 
 # Install Azure CLI
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
