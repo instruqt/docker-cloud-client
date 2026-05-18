@@ -1,5 +1,7 @@
 FROM python:3.14
 
+ARG KUBECTL_VERSION=v1.36.1
+
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install --no-install-recommends -y curl lsb-release gnupg apt-utils && \
     curl -sS --fail -L https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
@@ -8,7 +10,7 @@ RUN apt-get update && apt-get upgrade -y && \
     curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null && \
     apt-get update && \
     apt-get install --no-install-recommends -y curl vim apt-transport-https nano jq git groff nginx zip httpie google-cloud-sdk azure-cli && \
-    curl -LO "https://dl.k8s.io/release/v1.36.1/bin/linux/amd64/kubectl" && \
+    curl -LO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
     install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && \
     rm kubectl && \
     rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
