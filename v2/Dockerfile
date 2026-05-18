@@ -1,5 +1,7 @@
 FROM python:3.14
 
+ARG KUBECTL_VERSION=v1.36.1
+
 # Update and install essential packages
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install --no-install-recommends -y \
@@ -27,7 +29,7 @@ RUN curl -sS https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add
     rm -rf /var/lib/apt/lists/*
 
 # Install kubectl (pinned version, independent of Google Cloud SDK)
-RUN curl -LO "https://dl.k8s.io/release/v1.36.1/bin/linux/amd64/kubectl" && \
+RUN curl -LO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
     install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && \
     rm kubectl
 
