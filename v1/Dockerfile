@@ -1,18 +1,14 @@
-FROM python:3.14
-
-ARG KUBECTL_VERSION=v1.36.1
+FROM python:3.14-trixie
 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install --no-install-recommends -y curl lsb-release gnupg apt-utils && \
-    curl -sS --fail -L https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
-    echo "deb http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -c -s) main" > /etc/apt/sources.list.d/google-cloud-sdk.list && \
+    mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /etc/apt/keyrings/cloud.google.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -c -s) main" > /etc/apt/sources.list.d/google-cloud-sdk.list && \
     curl -sL https://aka.ms/InstallAzureCLIDeb | bash && \
     curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null && \
     apt-get update && \
-    apt-get install --no-install-recommends -y curl vim apt-transport-https nano jq git groff nginx zip httpie google-cloud-sdk azure-cli && \
-    curl -LO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
-    install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && \
-    rm kubectl && \
+    apt-get install --no-install-recommends -y curl vim apt-transport-https nano jq git groff nginx zip httpie google-cloud-sdk kubectl azure-cli && \
     rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     pip --no-cache-dir install awscli cfn-flip cfn-lint yamllint yq boto3 && \
     curl -o /usr/local/bin/gomplate -sSL https://github.com/hairyhenderson/gomplate/releases/download/v2.7.0/gomplate_linux-amd64 && \
