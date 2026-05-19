@@ -2,8 +2,8 @@ name: Scheduled Rebuild
 
 on:
   schedule:
-    # First Monday of every month at 08:00 UTC
-    - cron: '0 8 1-7 * 1'
+    # 1st of every month at 08:00 UTC
+    - cron: '0 8 1 * *'
   workflow_dispatch:
 
 concurrency:
