@@ -1,4 +1,4 @@
-FROM python:3.14
+FROM python:3.14-trixie
 
 # Update and install essential packages
 RUN apt-get update && apt-get upgrade -y && \
@@ -19,11 +19,12 @@ RUN apt-get update && apt-get upgrade -y && \
         zip && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Google Cloud SDK
-RUN curl -sS https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
-    echo "deb http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -c -s) main" > /etc/apt/sources.list.d/google-cloud-sdk.list && \
+# Install Google Cloud SDK and kubectl
+RUN mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /etc/apt/keyrings/cloud.google.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -c -s) main" > /etc/apt/sources.list.d/google-cloud-sdk.list && \
     apt-get update && \
-    apt-get install --no-install-recommends -y kubectl google-cloud-sdk && \
+    apt-get install --no-install-recommends -y google-cloud-sdk kubectl && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Azure CLI
