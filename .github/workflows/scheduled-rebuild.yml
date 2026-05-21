@@ -21,16 +21,24 @@ jobs:
         include:
           - major_version: v1
             dockerfile: v1/Dockerfile
-            tags: |
-              gcr.io/instruqt/cloud-client:1
-              gcr.io/instruqt/cloud-client:latest
+            latest: true
           - major_version: v2
             dockerfile: v2/Dockerfile
-            tags: |
-              gcr.io/instruqt/cloud-client:2
+            latest: false
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Generate tags
+        id: tags
+        run: |
+          DATE=$(date +%Y%m%d)
+          MAJOR="${{ matrix.major_version }}"
+          TAGS="gcr.io/instruqt/cloud-client:${MAJOR#v}-${DATE},gcr.io/instruqt/cloud-client:${MAJOR#v}"
+          if [[ "${{ matrix.latest }}" == "true" ]]; then
+            TAGS="${TAGS},gcr.io/instruqt/cloud-client:latest"
+          fi
+          echo "tags=${TAGS}" >> "$GITHUB_OUTPUT"
 
       - name: Authenticate to Google Cloud
         id: auth
@@ -57,4 +65,4 @@ jobs:
           push: true
           platforms: linux/amd64
           file: ${{ matrix.dockerfile }}
-          tags: ${{ matrix.tags }}
+          tags: ${{ steps.tags.outputs.tags }}
