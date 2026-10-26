@@ -1,4 +1,4 @@
-FROM python:3.14-trixie
+FROM python:3.15-trixie
 
 # Update and install essential packages
 RUN apt-get update && apt-get upgrade -y && \
