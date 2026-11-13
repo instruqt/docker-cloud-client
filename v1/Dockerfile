@@ -1,4 +1,4 @@
-FROM python:3.14-trixie
+FROM python:3.15-trixie
 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install --no-install-recommends -y curl lsb-release gnupg apt-utils && \
